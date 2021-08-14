@@ -11,7 +11,10 @@
 *
 -->
 
+## 5.0.1 - 2021-08-14
 
-## 5.0.0 (2021-08-13)
+* Changed tsconfig target to es5
+
+## 5.0.0 - 2021-08-13
 
 * Project release, same major of firebase-functions-extended.
