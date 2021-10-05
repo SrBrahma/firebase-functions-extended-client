@@ -1,6 +1,3 @@
-
-
-
 /** Converts your data and options with type safety to the CF data object to be sent.
  *
  * Will use the Short format options (d, cV, l instead of data, clientVersion, language).
@@ -18,7 +15,10 @@ type Options = {
   /** The timeout property allows you to control how long the application will wait
    * for the cloud function to respond in milliseconds. */
   timeout?: number;
-}
+};
+
+/** https://stackoverflow.com/a/49889856/10247962 */
+type EnsurePromise<T> = T extends PromiseLike<any> ? T : Promise<T>;
 
 
 /** Returns a callable, so you can call your firebase-functions-extended functions. */
@@ -29,10 +29,9 @@ export function getExtCallableFunction<F extends Record<string, {_argsType: any}
   language?: string;
   // We do this type cond inversed as undefined extends any but not the contrary
 }): (<K extends keyof F>(functionId: K, options?: Options) => (undefined extends F[K]['_argsType']
-  ? ((data?: F[K]['_argsType']) => Promise<unknown>)
-  : ((data: F[K]['_argsType']) => Promise<unknown>)))
-{
-  return (functionId, options) => {
+  ? ((data?: F[K]['_argsType']) => EnsurePromise<F[K]['_argsType']>)
+  : ((data: F[K]['_argsType']) => EnsurePromise<F[K]['_argsType']>))) {
+  return (functionId, options): any => { // any in rtn to ignore it.
     return async function (data: any) {
       const fun = functions.httpsCallable(functionId, { ...options });
       return (await fun(extData(data, { clientVersion: appVersion, language: language }))).data;

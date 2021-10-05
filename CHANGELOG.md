@@ -11,6 +11,10 @@
 *
 -->
 
+## 5.4.0 - 2021-10-05
+##### 5.4.0 to be in same version as main package.
+* Added return type to functions.
+
 ## 5.1.0 - 2021-08-24
 * `getExtCallableFunction` is now generic
 
