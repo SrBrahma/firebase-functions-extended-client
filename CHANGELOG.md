@@ -11,8 +11,8 @@
 *
 -->
 
-## 5.4.0 - 2021-10-05
-##### 5.4.0 to be in same version as main package.
+## 5.4.0~1 - 2021-10-05
+##### 5.4 to be in same minor version as main package. Nah, bad idea. Ignore this on future versions.
 * Added return type to functions.
 
 ## 5.1.0 - 2021-08-24

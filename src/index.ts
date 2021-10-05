@@ -22,15 +22,15 @@ type EnsurePromise<T> = T extends PromiseLike<any> ? T : Promise<T>;
 
 
 /** Returns a callable, so you can call your firebase-functions-extended functions. */
-export function getExtCallableFunction<F extends Record<string, {_argsType: any}>>({ functions, appVersion, language }: {
+export function getExtCallableFunction<F extends Record<string, {_argsType: any; _rtnType: any}>>({ functions, appVersion, language }: {
   /** Your firebase.functions(). */
   functions: any;
   appVersion?: string;
   language?: string;
   // We do this type cond inversed as undefined extends any but not the contrary
 }): (<K extends keyof F>(functionId: K, options?: Options) => (undefined extends F[K]['_argsType']
-  ? ((data?: F[K]['_argsType']) => EnsurePromise<F[K]['_argsType']>)
-  : ((data: F[K]['_argsType']) => EnsurePromise<F[K]['_argsType']>))) {
+  ? ((data?: F[K]['_argsType']) => EnsurePromise<F[K]['_rtnType']>)
+  : ((data: F[K]['_argsType']) => EnsurePromise<F[K]['_rtnType']>))) {
   return (functionId, options): any => { // any in rtn to ignore it.
     return async function (data: any) {
       const fun = functions.httpsCallable(functionId, { ...options });
