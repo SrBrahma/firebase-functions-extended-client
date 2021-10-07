@@ -21,4 +21,6 @@ yarn add firebase-functions-extended-client
 
 ## Usage
 
+* If data is an object, undefined properties are removed (deep copy non-undefined props). Before, as done automatically by firebase-functions, undefined props were turned to null.
+
 ## [Changelog](CHANGELOG.md)

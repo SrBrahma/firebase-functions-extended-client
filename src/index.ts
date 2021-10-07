@@ -1,3 +1,13 @@
+// https://stackoverflow.com/a/38340374/10247962
+function removeEmpty(obj: Record<string, any>) {
+  const newObj: Record<string, any> = {};
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] === Object(obj[key])) newObj[key] = removeEmpty(obj[key]);
+    else if (obj[key] !== undefined) newObj[key] = obj[key];
+  });
+  return newObj;
+}
+
 /** Converts your data and options with type safety to the CF data object to be sent.
  *
  * Will use the Short format options (d, cV, l instead of data, clientVersion, language).
@@ -34,6 +44,8 @@ export function getExtCallableFunction<F extends Record<string, {_argsType: any;
   return (functionId, options): any => { // any in rtn to ignore it.
     return async function (data: any) {
       const fun = functions.httpsCallable(functionId, { ...options });
+      if (typeof data === 'object' && data !== null)
+        data = removeEmpty(data);
       return (await fun(extData(data, { clientVersion: appVersion, language: language }))).data;
     };
   };
