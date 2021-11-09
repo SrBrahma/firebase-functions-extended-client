@@ -11,6 +11,9 @@
 *
 -->
 
+## 5.5.1
+* Fixed array being transformed to numbered obj, now using JSON.parse(JSON.stringify(data)) to remove undefined props.
+
 ## 5.5.0
 * If data is an object, undefined properties are now removed (deep copy non-undefined props). Before, as done automatically by firebase-functions, undefined props were turned to null.
 

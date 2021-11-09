@@ -1,11 +1,17 @@
-// https://stackoverflow.com/a/38340374/10247962
-function removeEmpty(obj: Record<string, any>) {
-  const newObj: Record<string, any> = {};
-  Object.keys(obj).forEach((key) => {
-    if (obj[key] === Object(obj[key])) newObj[key] = removeEmpty(obj[key]);
-    else if (obj[key] !== undefined) newObj[key] = obj[key];
-  });
-  return newObj;
+// Altered https://stackoverflow.com/a/38340374/10247962
+// it messes array (converts to numbered obj. using JSON for now.)
+// function removeUndefined(obj: Record<string, any>) {
+//   const newObj: Record<string, any> = {};
+//   for (const [key, val] of Object.entries(obj)) {
+//     if (val && typeof val === 'object' ) // If non-null object, go recursive
+//       newObj[key] = removeUndefined(obj[key]);
+//     else if (obj[key] !== undefined) // Copy value if not undefined
+//       newObj[key] = obj[key];
+//   }
+//   return newObj;
+// }
+function removeUndefined(obj: Record<string, any>) {
+  return JSON.parse(JSON.stringify(obj));
 }
 
 /** Converts your data and options with type safety to the CF data object to be sent.
@@ -45,7 +51,7 @@ export function getExtCallableFunction<F extends Record<string, {_argsType: any;
     return async function (data: any) {
       const fun = functions.httpsCallable(functionId, { ...options });
       if (typeof data === 'object' && data !== null)
-        data = removeEmpty(data);
+        data = removeUndefined(data);
       return (await fun(extData(data, { clientVersion: appVersion, language: language }))).data;
     };
   };
